@@ -8,6 +8,6 @@ namespace Business_Logic_Layer.DTO
         public int Id { get; set; }
         public string Name { get; set; }
 
-        public ICollection<Product> Products { get; set; }
+        public IEnumerable<Product> Products { get; set; }
     }
 }

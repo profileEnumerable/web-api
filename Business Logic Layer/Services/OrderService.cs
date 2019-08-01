@@ -20,37 +20,44 @@ namespace Business_Logic_Layer.Services
         public IEnumerable<OrderDTO> GetOrders()
         {
             IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>()).CreateMapper();
-
             return mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(DataBase.Orders.GetAll());
         }
 
-        public void MakeOrder(OrderDTO orderDto)
-        {
-            ICollection<Product> products = orderDto.Products;
+        //public void MakeOrder(OrderDTO orderDto)
+        //{
+        //    ICollection<Product> products = orderDto.Products;
 
-            if (products == null || products.Count == 0)
-            {
-                throw new Exception("No products selected");
-            }
+        //    if (products == null || products.Count == 0)
+        //    {
+        //        throw new Exception("No products selected");
+        //    }
 
-            var order = new Order
-            {
-                Name = orderDto.Name,
-                Products = products
-            };
+        //    var order = new Order
+        //    {
+        //        Name = orderDto.Name,
+        //        Products = products
+        //    };
 
-            DataBase.Orders.Create(order);
-            DataBase.Save();
-        }
+        //    DataBase.Orders.Create(order);
+        //    DataBase.Save();
+        //}
 
         public OrderDTO GetOrder(int id)
         {
-            throw new NotImplementedException();
+            Order order = DataBase.Orders.Get(id);
+
+            if (order == null)
+            {
+                return null;
+            }
+
+            return new OrderDTO() { Id = id, Name = order.Name, Products = order.Products };
         }
 
-        public IEnumerable<ProductDTO> GetOrderProducts(int id)
+        public IEnumerable<ProductDTO> GetOrderProducts(OrderDTO orderDto)
         {
-            throw new NotImplementedException();
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product,ProductDTO>()).CreateMapper();
+            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(orderDto.Products);
         }
 
         public void AddProductToOrder(int id, ProductDTO productDto)

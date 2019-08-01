@@ -3,6 +3,7 @@ using Data_Access_Layer.Entities;
 using Data_Access_Layer.Interfaces;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 
 namespace Data_Access_Layer.Repositories
 {
@@ -22,7 +23,7 @@ namespace Data_Access_Layer.Repositories
 
         public Order Get(int id)
         {
-            return _dbContext.Orders.Find(id);
+            return _dbContext.Orders.Include("Products").FirstOrDefault(o => o.Id == id);
         }
 
         public void Create(Order order)

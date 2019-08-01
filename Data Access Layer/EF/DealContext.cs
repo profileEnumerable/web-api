@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Linq;
 
 namespace Data_Access_Layer.EF
 {
@@ -20,18 +21,33 @@ namespace Data_Access_Layer.EF
         public DbSet<Product> Products { get; set; }
     }
 
-    public class DbInitializer : CreateDatabaseIfNotExists<DealContext>
+    public class DbInitializer : DropCreateDatabaseAlways<DealContext>
     {
         protected override void Seed(DealContext context)
         {
-            var products = new List<Product>
+            var computerParts = new List<Product>
             {
                 new Product(){Name = "Case Corsair Crystal",Manufacturer = "Corsair",YearOfIssue = new DateTime(2018,5,27)},
                 new Product(){Name = "Seasonic Prime Ultra",Manufacturer = "Seasonic",YearOfIssue = new DateTime(2017,1,20)},
                 new Product(){Name = "Intel Core i7-7700K",Manufacturer = "Intel",YearOfIssue = new DateTime(2019,8,10)}
             };
 
-            context.Products.AddRange(products);
+            var bicycleParts = new List<Product>
+            {
+                new Product(){Name = "Bicycle Wheel",Manufacturer = "Brooks",YearOfIssue = new DateTime(2019,8,2)},
+                new Product(){Name = "Grip Shift",Manufacturer = "Shimano",YearOfIssue = new DateTime(2017,3,1)},
+            };
+
+            var orders = new List<Order>()
+            {
+                new Order(){Name = "Computer parts" , Products = computerParts},
+                new Order(){Name = "Bicycle parts", Products = bicycleParts}
+            };
+
+            context.Products.AddRange(computerParts);
+            context.Products.AddRange(bicycleParts);
+
+            context.Orders.AddRange(orders);
 
             context.SaveChanges();
         }

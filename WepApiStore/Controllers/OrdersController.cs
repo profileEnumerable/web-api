@@ -9,6 +9,7 @@ using System.Web.Http;
 
 namespace WepApiStore.Controllers
 {
+    [RoutePrefix("api/orders")]
     public class OrdersController : ApiController
     {
         private readonly IOrderService _orderService;
@@ -29,6 +30,33 @@ namespace WepApiStore.Controllers
             }
 
             return Ok(orderDtos);
+        }
+
+        [HttpGet]
+        public IHttpActionResult Get(int id)
+        {
+            OrderDTO orderDto = _orderService.GetOrder(id);
+
+            if (orderDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(orderDto);
+        }
+
+        [HttpGet]
+        [Route("{id}/products")]
+        public IHttpActionResult GetProductsByOrderId(int id)
+        {
+            OrderDTO orderDto = _orderService.GetOrder(id);
+
+            if (orderDto == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_orderService.GetOrderProducts(orderDto));
         }
     }
 }
