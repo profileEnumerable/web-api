@@ -1,13 +1,17 @@
-﻿using System.Collections.Generic;
-using Data_Access_Layer.Entities;
+﻿using Data_Access_Layer.Entities;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Business_Logic_Layer.DTO
 {
-    public class OrderDTO
+    public class OrderDto
     {
         public int Id { get; set; }
+
+        [Required, MaxLength(30)]
         public string Name { get; set; }
 
-        public IEnumerable<Product> Products { get; set; }
+        [Required]
+        public ICollection<Product> Products { get; set; }
     }
 }

@@ -17,14 +17,14 @@ namespace Business_Logic_Layer.Services
             DataBase = dataBase;
         }
 
-        public IEnumerable<ProductDTO> GetProducts()
+        public IEnumerable<ProductDto> GetProducts()
         {
-            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDTO>()).CreateMapper();
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDto>()).CreateMapper();
 
-            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(DataBase.Products.GetAll());
+            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(DataBase.Products.GetAll());
         }
 
-        public void AddProduct(ProductDTO productDto)
+        public void AddProduct(ProductDto productDto)
         {
             var newProduct = new Product()
             {

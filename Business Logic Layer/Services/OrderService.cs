@@ -5,6 +5,7 @@ using Data_Access_Layer.Entities;
 using Data_Access_Layer.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Business_Logic_Layer.Services
 {
@@ -17,32 +18,25 @@ namespace Business_Logic_Layer.Services
             DataBase = dataBase;
         }
 
-        public IEnumerable<OrderDTO> GetOrders()
+        public IEnumerable<OrderDto> GetOrders()
         {
-            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Order>, IEnumerable<OrderDTO>>(DataBase.Orders.GetAll());
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Order, OrderDto>()).CreateMapper();
+            return mapper.Map<IEnumerable<Order>, IEnumerable<OrderDto>>(DataBase.Orders.GetAll());
         }
 
-        //public void MakeOrder(OrderDTO orderDto)
-        //{
-        //    ICollection<Product> products = orderDto.Products;
+        public void MakeOrder(OrderDto orderDto)
+        {
+            var order = new Order
+            {
+                Name = orderDto.Name,
+                Products = orderDto.Products
+            };
 
-        //    if (products == null || products.Count == 0)
-        //    {
-        //        throw new Exception("No products selected");
-        //    }
+            DataBase.Orders.Create(order);
+            DataBase.Save();
+        }
 
-        //    var order = new Order
-        //    {
-        //        Name = orderDto.Name,
-        //        Products = products
-        //    };
-
-        //    DataBase.Orders.Create(order);
-        //    DataBase.Save();
-        //}
-
-        public OrderDTO GetOrder(int id)
+        public OrderDto GetOrder(int id)
         {
             Order order = DataBase.Orders.Get(id);
 
@@ -51,18 +45,35 @@ namespace Business_Logic_Layer.Services
                 return null;
             }
 
-            return new OrderDTO() { Id = id, Name = order.Name, Products = order.Products };
+            return new OrderDto() { Id = id, Name = order.Name, Products = order.Products };
         }
 
-        public IEnumerable<ProductDTO> GetOrderProducts(OrderDTO orderDto)
+        public IEnumerable<ProductDto> GetOrderProducts(OrderDto orderDto)
         {
-            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product,ProductDTO>()).CreateMapper();
-            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductDTO>>(orderDto.Products);
+            IMapper mapper = new MapperConfiguration(cfg => cfg.CreateMap<Product, ProductDto>()).CreateMapper();
+            return mapper.Map<IEnumerable<Product>, IEnumerable<ProductDto>>(orderDto.Products);
         }
 
-        public void AddProductToOrder(int id, ProductDTO productDto)
+        public bool AddProductToOrder(int id, ProductDto productDto)
         {
-            throw new NotImplementedException();
+            Order order = DataBase.Orders.Get(id);
+
+            if (order == null)
+            {
+                return false;
+            }
+
+            var newProduct = new Product()
+            {
+                Name = productDto.Name,
+                Manufacturer = productDto.Manufacturer,
+                YearOfIssue = productDto.YearOfIssue
+            };
+
+            order.Products.Add(newProduct);
+            DataBase.Save();
+
+            return true;
         }
 
         public void Dispose()

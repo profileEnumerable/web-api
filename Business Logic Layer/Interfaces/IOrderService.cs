@@ -5,10 +5,11 @@ namespace Business_Logic_Layer.Interfaces
 {
     public interface IOrderService
     {
-        //void MakeOrder(OrderDTO orderDto);
-        IEnumerable<OrderDTO> GetOrders();
-        OrderDTO GetOrder(int id);
-        IEnumerable<ProductDTO> GetOrderProducts(OrderDTO orderDto);
-        void AddProductToOrder(int id,ProductDTO productDto);
+        void MakeOrder(OrderDto orderDto);
+        IEnumerable<OrderDto> GetOrders();
+        OrderDto GetOrder(int id);
+        IEnumerable<ProductDto> GetOrderProducts(OrderDto orderDto);
+        bool AddProductToOrder(int id,ProductDto productDto);
+        void Dispose();
     }
 }

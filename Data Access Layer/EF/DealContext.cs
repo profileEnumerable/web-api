@@ -21,7 +21,7 @@ namespace Data_Access_Layer.EF
         public DbSet<Product> Products { get; set; }
     }
 
-    public class DbInitializer : DropCreateDatabaseAlways<DealContext>
+    public class DbInitializer : DropCreateDatabaseIfModelChanges<DealContext>
     {
         protected override void Seed(DealContext context)
         {

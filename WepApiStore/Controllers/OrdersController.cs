@@ -1,5 +1,6 @@
 ﻿using Business_Logic_Layer.DTO;
 using Business_Logic_Layer.Interfaces;
+using Data_Access_Layer.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace WepApiStore.Controllers
         [HttpGet]
         public IHttpActionResult GetAll()
         {
-            IEnumerable<OrderDTO> orderDtos = _orderService.GetOrders();
+            IEnumerable<OrderDto> orderDtos = _orderService.GetOrders();
 
             if (orderDtos == null || !orderDtos.Any())
             {
@@ -35,7 +36,7 @@ namespace WepApiStore.Controllers
         [HttpGet]
         public IHttpActionResult Get(int id)
         {
-            OrderDTO orderDto = _orderService.GetOrder(id);
+            OrderDto orderDto = _orderService.GetOrder(id);
 
             if (orderDto == null)
             {
@@ -49,7 +50,7 @@ namespace WepApiStore.Controllers
         [Route("{id}/products")]
         public IHttpActionResult GetProductsByOrderId(int id)
         {
-            OrderDTO orderDto = _orderService.GetOrder(id);
+            OrderDto orderDto = _orderService.GetOrder(id);
 
             if (orderDto == null)
             {
@@ -57,6 +58,38 @@ namespace WepApiStore.Controllers
             }
 
             return Ok(_orderService.GetOrderProducts(orderDto));
+        }
+
+
+        [HttpPost]
+        public IHttpActionResult MakeOrder(OrderDto orderDto)
+        {
+            if (ModelState.IsValid)
+            {
+                _orderService.MakeOrder(orderDto);
+                return Ok();
+            }
+
+            return BadRequest();
+        }
+
+        [HttpPut]
+        [Route("{id}/products")]
+        public IHttpActionResult UpdateOrderProducts(int id, [FromBody]ProductDto productDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok("Product data is incorrect");
+            }
+
+            bool isAdded = _orderService.AddProductToOrder(id, productDto);
+
+            if (!isAdded)
+            {
+                return NotFound();
+            }
+
+            return Ok();
         }
     }
 }

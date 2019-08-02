@@ -17,7 +17,7 @@ namespace WepApiStore.Controllers
         [HttpGet]
         public IHttpActionResult GetAll()
         {
-            IEnumerable<ProductDTO> productDtos = _productService.GetProducts();
+            IEnumerable<ProductDto> productDtos = _productService.GetProducts();
 
             if (productDtos == null)
             {
@@ -28,7 +28,7 @@ namespace WepApiStore.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Add([FromBody]ProductDTO productDto)
+        public IHttpActionResult Add([FromBody]ProductDto productDto)
         {
             if (!ModelState.IsValid)
             {

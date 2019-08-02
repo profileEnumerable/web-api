@@ -5,8 +5,8 @@ namespace Business_Logic_Layer.Interfaces
 {
     public interface IProductService
     {
-        IEnumerable<ProductDTO> GetProducts();
-        void AddProduct(ProductDTO productDto);
+        IEnumerable<ProductDto> GetProducts();
+        void AddProduct(ProductDto productDto);
         void Dispose();
     }
 }

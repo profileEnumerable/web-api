@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Business_Logic_Layer.DTO
 {
-    public class ProductDTO
+    public class ProductDto
     {
         public int Id { get; set; }
 
-        [MaxLength(30)]
+        [Required, MaxLength(30)]
         public string Name { get; set; }
 
         [Required]
